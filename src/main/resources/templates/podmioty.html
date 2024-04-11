@@ -59,7 +59,8 @@
             <h2 class="mt-4">Dodaj podmiot</h2>
             <hr>
             <form action="#" class="mb-3" enctype="multipart/form-data" method="POST" th:action="@{/podmioty}">
-                <label class="form-label" for="podmioty">Plik CSV z podmiotami</label>
+                <label class="form-label" for="podmioty">Plik CSV z podmiotami. W przypadku takiego samego NIPu, podmiot
+                    zostanie zaktualizowany</label>
                 <input class="form-control form-control-sm" id="podmioty" name="podmioty" type="file"/>
                 <button class="btn btn-dark mt-3" type="submit">Dodaj</button>
             </form>
