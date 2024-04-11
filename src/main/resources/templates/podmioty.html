@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/head :: head('Podmioty')}"></head>
+<body>
+<div class="container" style="max-width: 1024px">
+    <div th:replace="~{/navbar :: podmioty-navbar}"></div>
+    <div class="row">
+        <div class="col-md-9">
+            <h2 class="mt-4">Podmioty</h2>
+            <hr>
+            <div class="overflow-x-auto">
+                <div>
+                    <div class="alert alert-success" role="alert" th:if="${podmiotySuccess != null}">
+                        <span th:text="${podmiotySuccess}"></span>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${podmiotyFailed != null}">
+                        <span th:text="${podmiotyFailed}"></span>
+                    </div>
+                </div>
+                <table class="table table-striped table-responsive-md border-1">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NIP</th>
+                        <th>PelnaNazwa</th>
+                        <th>REGON</th>
+                        <th>Wojewodztwo</th>
+                        <th>Powiat</th>
+                        <th>Gmina</th>
+                        <th>Ulica</th>
+                        <th>NrDomu</th>
+                        <th>NrLokalu</th>
+                        <th>Miejscowosc</th>
+                        <th>KodPocztowy</th>
+                        <th>Poczta</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="podmiot : ${podmioty}">
+                        <td th:text="${podmiot.id}"></td>
+                        <td th:text="${podmiot.nip}"></td>
+                        <td th:text="${podmiot.pelnaNazwa}"></td>
+                        <td th:text="${podmiot.regon}"></td>
+                        <td th:text="${podmiot.wojewodztwo}"></td>
+                        <td th:text="${podmiot.powiat}"></td>
+                        <td th:text="${podmiot.gmina}"></td>
+                        <td th:text="${podmiot.ulica}"></td>
+                        <td th:text="${podmiot.nrDomu}"></td>
+                        <td th:text="${podmiot.nrLokalu}"></td>
+                        <td th:text="${podmiot.miejscowosc}"></td>
+                        <td th:text="${podmiot.kodPocztowy}"></td>
+                        <td th:text="${podmiot.poczta}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h2 class="mt-4">Dodaj podmiot</h2>
+            <hr>
+            <form action="#" class="mb-3" enctype="multipart/form-data" method="POST" th:action="@{/podmioty}">
+                <label class="form-label" for="podmioty">Plik CSV z podmiotami</label>
+                <input class="form-control form-control-sm" id="podmioty" name="podmioty" type="file"/>
+                <button class="btn btn-dark mt-3" type="submit">Dodaj</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
