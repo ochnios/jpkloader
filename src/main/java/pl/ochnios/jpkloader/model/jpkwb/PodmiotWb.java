@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Entity
-@Table(name = "Podmioty")
+@Table(name = "PodmiotyWb")
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Podmiot {
+public class PodmiotWb {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
