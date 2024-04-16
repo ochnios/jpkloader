@@ -9,11 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ochnios.jpkloader.model.ServiceResponse;
+import pl.ochnios.jpkloader.model.dto.PodmiotDto;
 import pl.ochnios.jpkloader.model.jpkwb.PodmiotWb;
+import pl.ochnios.jpkloader.model.mappers.PodmiotMapper;
 import pl.ochnios.jpkloader.repos.PodmiotWbRepository;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -23,26 +26,27 @@ public class PodmiotService {
     private final CsvMapper csvMapper;
     private final Validator validator;
     private final PodmiotWbRepository podmiotWbRepository;
+    private final PodmiotMapper podmiotMapper;
 
-    public ServiceResponse<Iterable<PodmiotWb>> uploadPodmioty(MultipartFile podmiotyCsv) {
+    public ServiceResponse<Iterable<PodmiotDto>> uploadPodmioty(MultipartFile podmiotyCsv) {
         if (podmiotyCsv.isEmpty()) {
             return ServiceResponse.fail("Provided file is empty");
         }
 
-        List<PodmiotWb> podmioty;
+        List<PodmiotDto> podmiotDtos;
         try {
-            MappingIterator<PodmiotWb> readValues = csvMapper.readerFor(PodmiotWb.class).with(csvSchema)
+            MappingIterator<PodmiotDto> readValues = csvMapper.readerFor(PodmiotDto.class).with(csvSchema)
                     .readValues(podmiotyCsv.getInputStream());
-            podmioty = readValues.readAll();
+            podmiotDtos = readValues.readAll();
         } catch (Exception ex) {
             return ServiceResponse.fail("Error while reading file: " + ex.getMessage());
         }
 
         StringBuilder validationErrors = new StringBuilder();
-        for (var podmiot : podmioty) {
-            Set<ConstraintViolation<PodmiotWb>> violations = validator.validate(podmiot);
+        for (var podmiotDto : podmiotDtos) {
+            Set<ConstraintViolation<PodmiotDto>> violations = validator.validate(podmiotDto);
             if (!violations.isEmpty()) {
-                validationErrors.append("Podmiot ").append(podmiot.getNip()).append(": ");
+                validationErrors.append("Podmiot ").append(podmiotDto.getNip()).append(": ");
                 for (var violation : violations) {
                     validationErrors.append(violation.getPropertyPath()).append(" ")
                             .append(violation.getMessage()).append(", ");
@@ -53,13 +57,16 @@ public class PodmiotService {
             return ServiceResponse.fail("Wystąpiły błędy walidacji: " + validationErrors);
         }
 
-        for (var podmiot : podmioty) {
+        for (PodmiotDto podmiotDto : podmiotDtos) {
+            PodmiotWb podmiot = podmiotMapper.mapToPodmiotWb(podmiotDto);
             var found = podmiotWbRepository.findAllByNip(podmiot.getNip());
             found.ifPresent(value -> podmiot.setId(value.getId()));
             podmiotWbRepository.save(podmiot);
         }
+        var podmioty = StreamSupport.stream(podmiotWbRepository.findAllByOrderByIdDesc().spliterator(), false)
+                .map(podmiotMapper::mapToPodmiotDto).toList();
 
-        return ServiceResponse.success(podmiotWbRepository.findAllByOrderByIdDesc());
+        return ServiceResponse.success(podmioty);
     }
 
     public ServiceResponse<Iterable<PodmiotWb>> getAllPodmioty() {

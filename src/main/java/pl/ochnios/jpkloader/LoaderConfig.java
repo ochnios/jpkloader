@@ -10,7 +10,10 @@ public class LoaderConfig {
 
     @Bean
     public CsvSchema csvSchema() {
-        return CsvSchema.emptySchema().withHeader().withColumnSeparator(';');
+        return CsvSchema.emptySchema()
+                .withHeader()
+                .withColumnSeparator(';')
+                .withColumnReordering(true);
     }
 
     @Bean

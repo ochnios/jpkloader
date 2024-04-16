@@ -2,8 +2,7 @@ package pl.ochnios.jpkloader.model.jpkwb;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -15,38 +14,49 @@ public class PodmiotWb {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
-    @Pattern(regexp = "^[1-9]((\\d[1-9])|([1-9]\\d))\\d{7}$")
+
     @Column(nullable = false, unique = true)
+    @Size(min = 10, max = 10)
     private String nip;
-    @NotNull
-    @Pattern(regexp = "^.{1,240}$")
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 240)
     private String pelnaNazwa;
-    @Pattern(regexp = "^\\d{9}|\\d{14}|$")
+
+    @Size(min = 9, max = 14)
     private String regon;
-    @NotNull
-    @Pattern(regexp = "^.{1,36}$")
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 36)
     private String wojewodztwo;
-    @NotNull
-    @Pattern(regexp = "^.{1,36}$")
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 36)
     private String powiat;
-    @NotNull
-    @Pattern(regexp = "^.{1,36}$")
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 36)
     private String gmina;
-    @Pattern(regexp = "^.{1,65}|$")
+
+    @Size(min = 1, max = 65)
     private String ulica;
-    @NotNull
-    @Pattern(regexp = "^.{1,9}$")
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 9)
     private String nrDomu;
-    @Pattern(regexp = "^.{1,10}|$")
+
+    @Size(min = 1, max = 10)
     private String nrLokalu;
-    @NotNull
-    @Pattern(regexp = "^.{1,56}$")
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 56)
     private String miejscowosc;
-    @NotNull
-    @Pattern(regexp = "^.{1,8}$")
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 8)
     private String kodPocztowy;
-    @NotNull
-    @Pattern(regexp = "^.{1,65}$")
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 65)
     private String poczta;
 }
