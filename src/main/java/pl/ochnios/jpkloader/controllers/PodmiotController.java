@@ -1,6 +1,7 @@
 package pl.ochnios.jpkloader.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,7 @@ import pl.ochnios.jpkloader.services.PodmiotService;
 
 import java.io.IOException;
 
-
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class PodmiotController {
@@ -29,9 +30,11 @@ public class PodmiotController {
     public String uploadPodmioty(@RequestParam("podmioty") MultipartFile podmiotyCsv, Model model) throws IOException {
         var response = loaderService.uploadPodmioty(podmiotyCsv);
         if (response.isSuccess()) {
+            log.info("Uploaded: " + response);
             model.addAttribute("podmiotySuccess", "Dodano pomyślnie!");
             model.addAttribute("podmioty", response.getData());
         } else {
+            log.error("Failed: " + response);
             model.addAttribute("podmiotyFailed", "Wystąpiły błędy: " + response.getMessage());
         }
         return "podmioty";

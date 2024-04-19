@@ -1,4 +1,4 @@
-package pl.ochnios.jpkloader.model;
+package pl.ochnios.jpkloader.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
