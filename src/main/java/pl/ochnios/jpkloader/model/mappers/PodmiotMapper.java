@@ -8,7 +8,6 @@ import pl.ochnios.jpkloader.model.jpkwb.PodmiotWb;
 @Mapper(componentModel = "spring")
 public interface PodmiotMapper {
 
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = ".", source = ".")
     PodmiotWb mapToPodmiotWb(PodmiotDto podmiotDto);
 

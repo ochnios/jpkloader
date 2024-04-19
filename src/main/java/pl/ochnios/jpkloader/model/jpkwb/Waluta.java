@@ -8,12 +8,12 @@ import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 @Entity
-@Table(name = "WalutyWb")
+@Table(name = "Waluty")
 @Data
-public class WalutaWb {
+public class Waluta {
 
     @Id
-    @Column(nullable = false, length = 3)
+    @Column(columnDefinition = "char(3)")
     private String kod;
 
     @Nationalized

@@ -1,8 +1,14 @@
 package pl.ochnios.jpkloader.model.jpkwb;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "PodmiotyWb")
@@ -10,10 +16,7 @@ import org.hibernate.annotations.Nationalized;
 public class PodmiotWb {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(nullable = false, unique = true, length = 10)
+    @Column(columnDefinition = "char(10)")
     private String nip;
 
     @Nationalized
@@ -55,4 +58,7 @@ public class PodmiotWb {
     @Nationalized
     @Column(nullable = false, length = 65)
     private String poczta;
+
+    @UpdateTimestamp
+    private Instant modified;
 }

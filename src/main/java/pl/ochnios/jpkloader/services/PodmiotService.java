@@ -59,17 +59,15 @@ public class PodmiotService {
 
         for (PodmiotDto podmiotDto : podmiotDtos) {
             PodmiotWb podmiot = podmiotMapper.mapToPodmiotWb(podmiotDto);
-            var found = podmiotWbRepository.findAllByNip(podmiot.getNip());
-            found.ifPresent(value -> podmiot.setId(value.getId()));
             podmiotWbRepository.save(podmiot);
         }
-        var podmioty = StreamSupport.stream(podmiotWbRepository.findAllByOrderByIdDesc().spliterator(), false)
+        var podmioty = StreamSupport.stream(podmiotWbRepository.findAllByOrderByModifiedDesc().spliterator(), false)
                 .map(podmiotMapper::mapToPodmiotDto).toList();
 
         return ServiceResponse.success(podmioty);
     }
 
     public ServiceResponse<Iterable<PodmiotWb>> getAllPodmioty() {
-        return ServiceResponse.success(podmiotWbRepository.findAllByOrderByIdDesc());
+        return ServiceResponse.success(podmiotWbRepository.findAllByOrderByModifiedDesc());
     }
 }

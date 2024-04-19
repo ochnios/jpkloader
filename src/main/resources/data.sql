@@ -1,4 +1,4 @@
-insert into waluty_wb (kod, kraj, nazwa)
+insert into waluty (kod, kraj, nazwa)
 values ('AED', 'United Arab Emirates', 'Dirhams'),
        ('AFN', 'Afghanistan', 'Afghanis'),
        ('ALL', 'Albania', 'Leke'),
