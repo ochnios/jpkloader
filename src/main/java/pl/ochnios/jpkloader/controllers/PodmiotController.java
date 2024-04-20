@@ -18,17 +18,17 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class PodmiotController {
 
-    private final PodmiotService loaderService;
+    private final PodmiotService podmiotService;
 
     @GetMapping("/podmioty")
     public String podmioty(Model model) {
-        model.addAttribute("podmioty", loaderService.getAllPodmioty().getData());
+        model.addAttribute("podmioty", podmiotService.getAllPodmioty().getData());
         return "podmioty";
     }
 
     @PostMapping(value = "/podmioty", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String uploadPodmioty(@RequestParam("podmioty") MultipartFile podmiotyCsv, Model model) throws IOException {
-        var response = loaderService.uploadPodmioty(podmiotyCsv);
+        var response = podmiotService.uploadPodmioty(podmiotyCsv);
         if (response.isSuccess()) {
             log.info("Uploaded: " + response);
             model.addAttribute("podmiotySuccess", "Dodano pomyślnie!");
