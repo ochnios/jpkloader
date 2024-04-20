@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ochnios.jpkloader.services.NaglowekService;
+import pl.ochnios.jpkloader.services.WierszService;
 import pl.ochnios.jpkloader.services.WyciagService;
 
 @Slf4j
@@ -18,6 +19,7 @@ import pl.ochnios.jpkloader.services.WyciagService;
 public class WyciagController {
 
     private final NaglowekService naglowekService;
+    private final WierszService wierszService;
     private final WyciagService wyciagService;
 
     @GetMapping({"/", "/wyciagi"})
@@ -30,9 +32,11 @@ public class WyciagController {
                                 @RequestParam("wiersze") MultipartFile wierszeCsv,
                                 Model model) {
         var naglowkiResponse = naglowekService.loadNaglowki(naglowkiCsv);
-        if (naglowkiResponse.isSuccess()) {
+        var wierszeResponse = wierszService.loadWiersze(wierszeCsv);
+        if (naglowkiResponse.isSuccess() && wierszeResponse.isSuccess()) {
             log.info("Loaded naglowki: " + naglowkiResponse);
-            var wyciagiResponse = wyciagService.uploadWyciagi(naglowkiResponse.getData());
+            log.info("Loaded wiersze: " + wierszeResponse);
+            var wyciagiResponse = wyciagService.uploadWyciagi(naglowkiResponse.getData(), wierszeResponse.getData());
             if (wyciagiResponse.isSuccess()) {
                 log.info("Loaded wyciagi: " + wyciagiResponse);
                 model.addAttribute("wyciagiSuccess", "Dodano pomyślnie!");
@@ -42,8 +46,16 @@ public class WyciagController {
                 model.addAttribute("wyciagiFailed", "Błąd: " + wyciagiResponse.getMessage());
             }
         } else {
-            log.error("Loading naglowki failed: " + naglowkiResponse);
-            model.addAttribute("wyciagiFailed", "Błąd: " + naglowkiResponse.getMessage());
+            String message = "Błąd: ";
+            if (!naglowkiResponse.isSuccess()) {
+                log.error("Loading naglowki failed: " + naglowkiResponse);
+                message += naglowkiResponse.getMessage();
+            }
+            if (!wierszeResponse.isSuccess()) {
+                log.error("Loading wiersze failed: " + naglowkiResponse);
+                message += wierszeResponse.getMessage();
+            }
+            model.addAttribute("wyciagiFailed", message);
         }
 
         return "wyciagi";

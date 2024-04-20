@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "NaglowkiWb")
@@ -22,6 +23,9 @@ public class NaglowekWb {
     @ManyToOne
     @JoinColumn(name = "rachunek_numer", referencedColumnName = "numer")
     private Rachunek rachunek;
+
+    @OneToMany(mappedBy = "naglowek")
+    private List<WierszWb> wiersze;
 
     @NotNull
     private LocalDate dataOd;

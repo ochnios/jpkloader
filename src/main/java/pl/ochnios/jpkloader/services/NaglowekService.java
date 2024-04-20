@@ -15,7 +15,6 @@ import pl.ochnios.jpkloader.model.mappers.NaglowekMapper;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,9 +44,7 @@ public class NaglowekService {
             return ServiceResponse.fail("Wystąpiły błędy walidacji nagłówków: " + validationErrors);
         }
 
-        List<NaglowekWb> naglowki = naglowekDtos.stream()
-                .map(naglowekMapper::mapToNaglowekWb)
-                .collect(Collectors.toList());
+        List<NaglowekWb> naglowki = naglowekDtos.stream().map(naglowekMapper::mapToNaglowekWb).toList();
 
         return ServiceResponse.success(naglowki);
     }
