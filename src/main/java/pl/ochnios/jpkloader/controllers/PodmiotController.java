@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ochnios.jpkloader.services.PodmiotService;
 
-import java.io.IOException;
-
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -27,7 +25,7 @@ public class PodmiotController {
     }
 
     @PostMapping(value = "/podmioty", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String uploadPodmioty(@RequestParam("podmioty") MultipartFile podmiotyCsv, Model model) throws IOException {
+    public String uploadPodmioty(@RequestParam("podmioty") MultipartFile podmiotyCsv, Model model) {
         var response = podmiotService.uploadPodmioty(podmiotyCsv);
         if (response.isSuccess()) {
             log.info("Uploaded: " + response);
@@ -35,7 +33,7 @@ public class PodmiotController {
             model.addAttribute("podmioty", response.getData());
         } else {
             log.error("Failed: " + response);
-            model.addAttribute("podmiotyFailed", "Wystąpiły błędy: " + response.getMessage());
+            model.addAttribute("podmiotyFailed", "Błąd: " + response.getMessage());
         }
         return "podmioty";
     }

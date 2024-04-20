@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/head :: head('Wyciągi')}"></head>
+<body>
+<div class="container" style="max-width: 1024px">
+    <div th:replace="~{/navbar :: wyciagi-navbar}"></div>
+    <div class="row">
+        <div class="col-md-9">
+            <h2 class="mt-4">Wyciągi</h2>
+            <hr>
+            <div class="overflow-x-auto">
+                <div>
+                    <div class="alert alert-success" role="alert" th:if="${wyciagiSuccess != null}">
+                        <span th:text="${wyciagiSuccess}"></span>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${wyciagiFailed != null}">
+                        <span th:text="${wyciagiFailed}"></span>
+                    </div>
+                </div>
+                <table class="table table-striped table-responsive-md border-1">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NIP</th>
+                        <th>Rachunek</th>
+                        <th>Od</th>
+                        <th>Do</th>
+                        <th>Wiersze</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="wyciag : ${wyciagi}">
+                        <td th:text="${wyciag.id}"></td>
+                        <td th:text="${wyciag.nip}"></td>
+                        <td th:text="${wyciag.rachunek}"></td>
+                        <td th:text="${wyciag.dataOd}"></td>
+                        <td th:text="${wyciag.dataDo}"></td>
+                        <td th:text="${wyciag.wiersze}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h2 class="mt-4">Dodaj dane dla wyciągu</h2>
+            <hr>
+            <form action="#" class="mb-3" enctype="multipart/form-data" method="POST" th:action="@{/wyciagi}">
+                <label class="form-label" for="naglowki">Plik CSV z nagłówkami</label>
+                <input class="form-control form-control-sm" id="naglowki" name="naglowki" type="file"/>
+                <br/>
+                <label class="form-label" for="wiersze">Plik CSV z wierszami</label>
+                <input class="form-control form-control-sm" id="wiersze" name="wiersze" type="file"/>
+                <button class="btn btn-dark mt-3" type="submit">Dodaj</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

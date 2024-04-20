@@ -1,11 +1,12 @@
-package pl.ochnios.jpkloader.model.dto;
+package pl.ochnios.jpkloader.model.jpkwb;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import pl.ochnios.jpkloader.model.jpkwb.Rachunek;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
@@ -39,4 +40,7 @@ public class NaglowekWb {
     @NotNull
     @Column(columnDefinition = "char(4)")
     private String kodUrzedu;
+
+    @UpdateTimestamp
+    private Instant modified;
 }

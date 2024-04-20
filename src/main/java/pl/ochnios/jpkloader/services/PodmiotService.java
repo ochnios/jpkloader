@@ -30,7 +30,7 @@ public class PodmiotService {
 
     public ServiceResponse<Iterable<PodmiotDto>> uploadPodmioty(MultipartFile podmiotyCsv) {
         if (podmiotyCsv.isEmpty()) {
-            return ServiceResponse.fail("Provided file is empty");
+            return ServiceResponse.fail("Plik jest pusty");
         }
 
         List<PodmiotDto> podmiotDtos;
@@ -39,20 +39,10 @@ public class PodmiotService {
                     .readValues(podmiotyCsv.getInputStream());
             podmiotDtos = readValues.readAll();
         } catch (Exception ex) {
-            return ServiceResponse.fail("Error while reading file: " + ex.getMessage());
+            return ServiceResponse.fail("Błąd podczas odczytu pliku: " + ex.getMessage());
         }
 
-        StringBuilder validationErrors = new StringBuilder();
-        for (var podmiotDto : podmiotDtos) {
-            Set<ConstraintViolation<PodmiotDto>> violations = validator.validate(podmiotDto);
-            if (!violations.isEmpty()) {
-                validationErrors.append("Podmiot ").append(podmiotDto.getNip()).append(": ");
-                for (var violation : violations) {
-                    validationErrors.append(violation.getPropertyPath()).append(" ")
-                            .append(violation.getMessage()).append(", ");
-                }
-            }
-        }
+        var validationErrors = validatePodmioty(podmiotDtos);
         if (!validationErrors.isEmpty()) {
             return ServiceResponse.fail("Wystąpiły błędy walidacji: " + validationErrors);
         }
@@ -69,5 +59,20 @@ public class PodmiotService {
 
     public ServiceResponse<Iterable<PodmiotWb>> getAllPodmioty() {
         return ServiceResponse.success(podmiotWbRepository.findAllByOrderByModifiedDesc());
+    }
+
+    private StringBuilder validatePodmioty(List<PodmiotDto> podmiotDtos) {
+        StringBuilder validationErrors = new StringBuilder();
+        for (var podmiotDto : podmiotDtos) {
+            Set<ConstraintViolation<PodmiotDto>> violations = validator.validate(podmiotDto);
+            if (!violations.isEmpty()) {
+                validationErrors.append("Podmiot ").append(podmiotDto.getNip()).append(": ");
+                for (var violation : violations) {
+                    validationErrors.append(violation.getPropertyPath()).append(" ")
+                            .append(violation.getMessage()).append(", ");
+                }
+            }
+        }
+        return validationErrors;
     }
 }
