@@ -24,6 +24,7 @@ public class WyciagController {
 
     @GetMapping({"/", "/wyciagi"})
     public String wyciagi(Model model) {
+        model.addAttribute("wyciagi", wyciagService.getAllWyciagi().getData());
         return "wyciagi";
     }
 
@@ -57,7 +58,6 @@ public class WyciagController {
             }
             model.addAttribute("wyciagiFailed", message);
         }
-
         return "wyciagi";
     }
 }

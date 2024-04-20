@@ -1,8 +1,9 @@
 package pl.ochnios.jpkloader.model.jpkwb;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,29 +17,28 @@ public class WierszWb {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "naglowek_id", nullable = false)
+    @ToString.Exclude
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "naglowek_id")
     private NaglowekWb naglowek;
 
     @Column(nullable = false)
     private int numer;
 
-    @NotNull
+    @Column(nullable = false)
     private LocalDate dataOperacji;
 
-    @NotNull
-    @Column(length = 256)
+    @Nationalized
+    @Column(nullable = false, length = 256)
     private String nazwaPodmiotu;
 
-    @NotNull
-    @Column(length = 256)
+    @Nationalized
+    @Column(nullable = false, length = 256)
     private String opisOperacji;
 
-    @NotNull
-    @Column(precision = 16, scale = 2)
+    @Column(nullable = false, precision = 16, scale = 2)
     private BigDecimal kwotaOperacji;
 
-    @NotNull
-    @Column(precision = 16, scale = 2)
+    @Column(nullable = false, precision = 16, scale = 2)
     private BigDecimal saldoOperacji;
 }

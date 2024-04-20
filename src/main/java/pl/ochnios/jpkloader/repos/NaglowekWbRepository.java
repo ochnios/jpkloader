@@ -7,5 +7,5 @@ import pl.ochnios.jpkloader.model.jpkwb.NaglowekWb;
 @Repository
 public interface NaglowekWbRepository extends CrudRepository<NaglowekWb, Integer> {
 
-    Iterable<NaglowekWb> findAllByOrderByModifiedDesc();
+    Iterable<NaglowekWb> findAllByOrderByIdDesc();
 }

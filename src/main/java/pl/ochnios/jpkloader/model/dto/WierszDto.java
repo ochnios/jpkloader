@@ -3,7 +3,6 @@ package pl.ochnios.jpkloader.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 @Data
@@ -13,9 +12,6 @@ public class WierszDto {
     @NotNull
     @Pattern(regexp = "^[A-Z]{2}[0-9]{2}[0-9A-Z]{10,30}$")
     private String numerRachunku;
-
-    @PositiveOrZero
-    private int numerWiersza;
 
     @NotNull
     @Pattern(regexp = "^(\\d{4})-(\\d{2})-(\\d{2})$")

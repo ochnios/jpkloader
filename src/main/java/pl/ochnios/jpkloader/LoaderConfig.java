@@ -12,7 +12,7 @@ public class LoaderConfig {
     public CsvSchema csvSchema() {
         return CsvSchema.emptySchema()
                 .withHeader()
-                .withColumnSeparator(';')
+                .withColumnSeparator('\t')
                 .withColumnReordering(true);
     }
 

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ochnios.jpkloader.model.dto.NaglowekDto;
 import pl.ochnios.jpkloader.model.dto.ServiceResponse;
-import pl.ochnios.jpkloader.model.jpkwb.NaglowekWb;
 import pl.ochnios.jpkloader.model.mappers.NaglowekMapper;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class NaglowekService {
     private final Validator validator;
     private final NaglowekMapper naglowekMapper;
 
-    public ServiceResponse<List<NaglowekWb>> loadNaglowki(MultipartFile naglowkiCsv) {
+    public ServiceResponse<List<NaglowekDto>> loadNaglowki(MultipartFile naglowkiCsv) {
         if (naglowkiCsv.isEmpty()) {
             return ServiceResponse.fail("Plik z nagłówkami jest pusty");
         }
@@ -44,9 +43,7 @@ public class NaglowekService {
             return ServiceResponse.fail("Wystąpiły błędy walidacji nagłówków: " + validationErrors);
         }
 
-        List<NaglowekWb> naglowki = naglowekDtos.stream().map(naglowekMapper::mapToNaglowekWb).toList();
-
-        return ServiceResponse.success(naglowki);
+        return ServiceResponse.success(naglowekDtos);
     }
 
     private StringBuilder validateNaglowki(List<NaglowekDto> naglowekDtos) {

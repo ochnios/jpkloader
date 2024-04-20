@@ -1,25 +1,28 @@
 package pl.ochnios.jpkloader.model.jpkwb;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "Rachunki")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Rachunek {
 
     @Id
     @Column(columnDefinition = "char(34)")
     private String numer;
 
-    @NotNull
+    @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "podmiot_nip", referencedColumnName = "nip")
+    @JoinColumn(nullable = false, name = "podmiot_nip", referencedColumnName = "nip")
     private PodmiotWb podmiot;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "waluta_kod", referencedColumnName = "kod")
+    @JoinColumn(nullable = false, name = "waluta_kod", referencedColumnName = "kod")
     private Waluta waluta;
 }

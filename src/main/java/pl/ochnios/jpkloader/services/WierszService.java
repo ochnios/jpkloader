@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ochnios.jpkloader.model.dto.ServiceResponse;
 import pl.ochnios.jpkloader.model.dto.WierszDto;
-import pl.ochnios.jpkloader.model.jpkwb.WierszWb;
 import pl.ochnios.jpkloader.model.mappers.WierszMapper;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class WierszService {
     private final Validator validator;
     private final WierszMapper wierszMapper;
 
-    public ServiceResponse<List<WierszWb>> loadWiersze(MultipartFile wierszeCsv) {
+    public ServiceResponse<List<WierszDto>> loadWiersze(MultipartFile wierszeCsv) {
         if (wierszeCsv.isEmpty()) {
             return ServiceResponse.fail("Plik z wierszami jest pusty");
         }
@@ -44,9 +43,7 @@ public class WierszService {
             return ServiceResponse.fail("Wystąpiły błędy walidacji wierszy: " + validationErrors);
         }
 
-        List<WierszWb> wiersze = wierszDtos.stream().map(wierszMapper::mapToWierszWb).toList();
-
-        return ServiceResponse.success(wiersze);
+        return ServiceResponse.success(wierszDtos);
     }
 
     private StringBuilder validateWiersze(List<WierszDto> wierszDtos) {
