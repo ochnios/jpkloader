@@ -16,6 +16,8 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
+import org.xml.sax.SAXException;
+import pl.ochnios.jpkloader.JpkLoaderApplication;
 import pl.ochnios.jpkloader.services.NaglowekService;
 import pl.ochnios.jpkloader.services.WierszService;
 import pl.ochnios.jpkloader.services.WyciagService;
@@ -25,6 +27,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -86,8 +91,15 @@ public class WyciagController {
         Context ctx = new Context();
         if (xmlResponse.isSuccess()) {
             ctx.setVariable("data", prettifyXml(xmlResponse.getData()));
+            log.info(String.format("Generated wyciag: %s %s", filename, xmlResponse.getData()));
+            String validationResult = validateWyciag(xmlResponse.getData());
+            if (!"valid".equals(validationResult)) {
+                log.warn(String.format("%s.xml not passed schema validation: %s", filename, validationResult));
+            }
+
         } else {
             ctx.setVariable("data", "<err>" + xmlResponse.getMessage() + "</err>");
+            log.error(String.format("Generation failed for %s: %s", filename, xmlResponse.getMessage()));
         }
         respondWithXml(res, "template", ctx, filename);
     }
@@ -109,7 +121,7 @@ public class WyciagController {
         return result.getWriter().toString();
     }
 
-    public SpringTemplateEngine xmlEngine() {
+    private SpringTemplateEngine xmlEngine() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setApplicationContext(new AnnotationConfigApplicationContext());
         resolver.setPrefix("classpath:/xml/");
@@ -121,5 +133,19 @@ public class WyciagController {
         engine.setTemplateResolver(resolver);
 
         return engine;
+    }
+
+    private String validateWyciag(String input) throws SAXException {
+        SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+        Schema compiledSchema = schemaFactory.newSchema(JpkLoaderApplication.class
+                .getClassLoader().getResource("schema/Schemat_JPK_WB(1)_v1-0.xsd"));
+        Validator validator = compiledSchema.newValidator();
+        Source source = new StreamSource(new StringReader(input));
+        try {
+            validator.validate(source);
+            return "valid";
+        } catch (SAXException | IOException ex) {
+            return ex.getMessage();
+        }
     }
 }

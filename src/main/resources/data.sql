@@ -16,8 +16,8 @@ begin
                      getdate()    as 'DataWytworzeniaJPK',
                      data_od      as 'DataOd',
                      data_do      as 'DataDo',
-                     kod_urzedu   as 'KodUrzedu',
-                     (select waluta_kod from rachunki where numer = @rachunek_numer) AS 'DomyslnyKodWaluty'
+                     (select waluta_kod from rachunki where numer = @rachunek_numer) AS 'DomyslnyKodWaluty',
+                     kod_urzedu   as 'KodUrzedu'
               from naglowki_wb
               where id = @naglowek_id
               for xml path(''), root('Naglowek'), type
