@@ -1,3 +1,89 @@
+if object_id('GENERUJ_JPK_WB_XML', 'P') is not null
+    drop procedure GENERUJ_JPK_WB_XML;
+
+create procedure GENERUJ_JPK_WB_XML @naglowek_id int, @xml nvarchar(max) output as
+begin
+    declare @rachunek_numer varchar(36) = (select rachunek_numer from naglowki_wb where id = @naglowek_id)
+    declare @podmiot_nip varchar(10) = (select podmiot_nip from rachunki where numer = @rachunek_numer)
+
+    declare @tmp xml = (
+        select
+            ( select 'JPK_WB (1)' as 'KodFormularza/@kodSystemowy',
+                     '1-0'        as 'KodFormularza/@wersjaSchemy',
+                     'JPK_WB'     as 'KodFormularza',
+                     '1'          as 'WariantFormularza',
+                     '1'          as 'CelZlozenia',
+                     getdate()    as 'DataWytworzeniaJPK',
+                     data_od      as 'DataOd',
+                     data_do      as 'DataDo',
+                     kod_urzedu   as 'KodUrzedu',
+                     (select waluta_kod from rachunki where numer = @rachunek_numer) AS 'DomyslnyKodWaluty'
+              from naglowki_wb
+              where id = @naglowek_id
+              for xml path(''), root('Naglowek'), type
+            ),
+            ( select
+                  ( select
+                        nip as 'NIP',
+                        regon as 'REGON',
+                        pelna_nazwa as 'PelnaNazwa'
+                    from podmioty_wb where nip = @podmiot_nip
+                    for xml path('IdentyfikatorPodmiotu'), type
+                  ),
+                  ( select
+                        'PL' as 'KodKraju',
+                        wojewodztwo as 'Wojewodztwo',
+                        powiat as 'Powiat',
+                        gmina as 'Gmina',
+                        ulica as 'Ulica',
+                        nr_domu as 'NrDomu',
+                        nr_lokalu as 'NrLokalu',
+                        miejscowosc as 'Miejscowosc',
+                        kod_pocztowy as 'KodPocztowy',
+                        poczta as 'Poczta'
+                    from podmioty_wb where nip = @podmiot_nip
+                    for xml path('AdresPodmiotu'), type
+                  )
+              from naglowki_wb
+              where id = @naglowek_id
+              for xml path('Podmiot1'), type
+            ),
+            (select trim(@rachunek_numer)
+             for xml path('NumerRachunku'), type),
+            ( select
+                  saldo_poczatkowe as 'SaldoPoczatkowe',
+                  saldo_koncowe as 'SaldoKoncowe'
+              from naglowki_wb where id = @naglowek_id
+              for xml path('Salda'), type
+            ),
+            ( select
+                  'G' as '@typ',
+                  numer as 'NumerWiersza',
+                  data_operacji as 'DataOperacji',
+                  nazwa_podmiotu as 'NazwaPodmiotu',
+                  opis_operacji as 'OpisOperacji',
+                  kwota_operacji as 'KwotaOperacji',
+                  saldo_operacji as 'SaldoOperacji'
+              from wiersze_wb where naglowek_id = @naglowek_id
+              order by numer asc
+              for xml path('WyciagWiersz'), type
+            ),
+            ( select
+                  count(*) as 'LiczbaWierszy',
+                  sum(case when kwota_operacji < 0 then kwota_operacji else 0 end) as 'SumaObciazen',
+                  sum(case when kwota_operacji > 0 then kwota_operacji else 0 end) as 'SumaUznan'
+              from wiersze_wb where naglowek_id = @naglowek_id
+              for xml path('WyciagCtrl'), type
+            )
+        for xml path(''), root('JPK'), type
+    )
+
+    set @tmp.modify('delete  //*[not(node()) and not(text()) and not(@*)]')
+    set @tmp = replace(cast(@tmp as varchar(max)), '<JPK', '<JPK xmlns="http://jpk.mf.gov.pl/wzor/2016/03/09/03092/"')
+    set @xml = cast(@tmp as nvarchar(max))
+end;
+
+
 insert into waluty (kod, kraj, nazwa)
 values ('AED', 'United Arab Emirates', 'Dirhams'),
        ('AFN', 'Afghanistan', 'Afghanis'),

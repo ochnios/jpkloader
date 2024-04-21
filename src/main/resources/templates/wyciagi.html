@@ -26,6 +26,7 @@
                         <th>Od</th>
                         <th>Do</th>
                         <th>Wiersze</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -36,6 +37,9 @@
                         <td th:text="${wyciag.dataOd}"></td>
                         <td th:text="${wyciag.dataDo}"></td>
                         <td th:text="${wyciag.wiersze}"></td>
+                        <td><a th:href="${'/wyciagi/' + wyciag.nip + '_' + wyciag.rachunek
+                        + '_' + wyciag.dataOd + '_' + wyciag.dataDo + '_' + wyciag.id + '.xml'}">Pobierz</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

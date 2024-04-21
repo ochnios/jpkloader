@@ -87,6 +87,14 @@ public class WyciagService {
         return ServiceResponse.success(wyciagi);
     }
 
+    public ServiceResponse<String> generateJpkWbXml(int naglowekId) {
+        String xml = naglowekWbRepository.generateJpkWbXml(naglowekId);
+        if (xml == null) {
+            return ServiceResponse.fail(String.format("Nie znaleziono nagłówka o id=%d", naglowekId));
+        }
+        return ServiceResponse.success(xml);
+    }
+
     private List<WierszWb> getWierszeForNaglowek(NaglowekWb naglowekWb, List<WierszWb> wiersze) {
         return wiersze.stream().filter(
                 w -> w.getNaglowek().getRachunek().getNumer().equals(naglowekWb.getRachunek().getNumer())
@@ -107,4 +115,6 @@ public class WyciagService {
                 + naglowekWb.getRachunek().getNumer() + " "
                 + naglowekWb.getDataOd() + " - " + naglowekWb.getDataOd();
     }
+
+
 }
