@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:JPK xmlns:tns="http://jpk.mf.gov.pl/wzor/2016/03/09/03092/" xmlns="http://jpk.mf.gov.pl/wzor/2016/03/09/03092/" xmlns:etd="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2016/01/25/eD/DefinicjeTypy/">
+  <tns:Naglowek>
+    <tns:KodFormularza kodSystemowy="JPK_WB (1)" wersjaSchemy="1-0">JPK_WB</tns:KodFormularza>
+    <tns:WariantFormularza>1</tns:WariantFormularza>
+    <tns:CelZlozenia>1</tns:CelZlozenia>
+    <tns:DataWytworzeniaJPK>2024-05-23T17:26:23.217</tns:DataWytworzeniaJPK>
+    <tns:DataOd>2024-02-01</tns:DataOd>
+    <tns:DataDo>2024-02-29</tns:DataDo>
+    <tns:DomyslnyKodWaluty>PLN</tns:DomyslnyKodWaluty>
+    <tns:KodUrzedu>1433</tns:KodUrzedu>
+  </tns:Naglowek>
+  <tns:Podmiot1>
+    <tns:IdentyfikatorPodmiotu>
+      <etd:NIP>5474886762</etd:NIP>
+      <etd:PelnaNazwa>Company1</etd:PelnaNazwa>
+      <etd:REGON>234567890</etd:REGON>
+    </tns:IdentyfikatorPodmiotu>
+    <tns:AdresPodmiotu>
+      <etd:KodKraju>PL</etd:KodKraju>
+      <etd:Wojewodztwo>mazowieckie</etd:Wojewodztwo>
+      <etd:Powiat>Warszawa</etd:Powiat>
+      <etd:Gmina>Warszawa</etd:Gmina>
+      <etd:Ulica>Warszawska</etd:Ulica>
+      <etd:NrDomu>1</etd:NrDomu>
+      <etd:NrLokalu>10</etd:NrLokalu>
+      <etd:Miejscowosc>Warszawa</etd:Miejscowosc>
+      <etd:KodPocztowy>00-101</etd:KodPocztowy>
+      <etd:Poczta>Warszawa</etd:Poczta>
+    </tns:AdresPodmiotu>
+  </tns:Podmiot1>
+  <tns:NumerRachunku>PL80109024023367267123281484</tns:NumerRachunku>
+  <tns:Salda>
+    <tns:SaldoPoczatkowe>2000.00</tns:SaldoPoczatkowe>
+    <tns:SaldoKoncowe>20000.00</tns:SaldoKoncowe>
+  </tns:Salda>
+  <tns:WyciagWiersz typ="G">
+    <tns:NumerWiersza>1</tns:NumerWiersza>
+    <tns:DataOperacji>2024-02-02</tns:DataOperacji>
+    <tns:NazwaPodmiotu>Mietex</tns:NazwaPodmiotu>
+    <tns:OpisOperacji>Płyty GK</tns:OpisOperacji>
+    <tns:KwotaOperacji>-3000.00</tns:KwotaOperacji>
+    <tns:SaldoOperacji>-1000.00</tns:SaldoOperacji>
+  </tns:WyciagWiersz>
+  <tns:WyciagWiersz typ="G">
+    <tns:NumerWiersza>2</tns:NumerWiersza>
+    <tns:DataOperacji>2024-02-15</tns:DataOperacji>
+    <tns:NazwaPodmiotu>Jacek Jaworek</tns:NazwaPodmiotu>
+    <tns:OpisOperacji>Robocizna Pruszków</tns:OpisOperacji>
+    <tns:KwotaOperacji>5000.00</tns:KwotaOperacji>
+    <tns:SaldoOperacji>4000.00</tns:SaldoOperacji>
+  </tns:WyciagWiersz>
+  <tns:WyciagWiersz typ="G">
+    <tns:NumerWiersza>3</tns:NumerWiersza>
+    <tns:DataOperacji>2024-02-18</tns:DataOperacji>
+    <tns:NazwaPodmiotu>Donald T.</tns:NazwaPodmiotu>
+    <tns:OpisOperacji>Robocizna Wawer</tns:OpisOperacji>
+    <tns:KwotaOperacji>6000.00</tns:KwotaOperacji>
+    <tns:SaldoOperacji>10000.00</tns:SaldoOperacji>
+  </tns:WyciagWiersz>
+  <tns:WyciagWiersz typ="G">
+    <tns:NumerWiersza>4</tns:NumerWiersza>
+    <tns:DataOperacji>2024-02-20</tns:DataOperacji>
+    <tns:NazwaPodmiotu>Jarosław K.</tns:NazwaPodmiotu>
+    <tns:OpisOperacji>Robocizna Żoliborz</tns:OpisOperacji>
+    <tns:KwotaOperacji>10000.00</tns:KwotaOperacji>
+    <tns:SaldoOperacji>20000.00</tns:SaldoOperacji>
+  </tns:WyciagWiersz>
+  <tns:WyciagCtrl>
+    <tns:LiczbaWierszy>4</tns:LiczbaWierszy>
+    <tns:SumaObciazen>-3000.00</tns:SumaObciazen>
+    <tns:SumaUznan>21000.00</tns:SumaUznan>
+  </tns:WyciagCtrl>
+</tns:JPK>
